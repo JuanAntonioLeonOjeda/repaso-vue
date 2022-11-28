@@ -1,32 +1,53 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
-  </div>
+  <v-app>
+    <SearchInput @searchUser="saveInput" />
+    <!-- <MyComponent v-for="(user, idx) in filterUsers" :key="idx" :info="user" /> -->
+    <router-view></router-view>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import MyComponent from './components/MyComponent.vue'
+import SearchInput from './components/SearchInput.vue'
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: 'App',
+  components: {
+    MyComponent,
+    SearchInput,
+  },
+  data: () => ({
+    users: [
+    {
+      userName: 'Oliver',
+      age: 78,
+      image: 'https://www.emmegi.co.uk/wp-content/uploads/2019/01/User-Icon.jpg'
+    },
+    {
+      userName: 'Ana',
+      age: 89,
+      image: 'https://ceacopiniones.es/wp-content/uploads/2019/03/user-8.png'
+    },
+    {
+      userName: 'Fulano',
+      age: 65,
+      image: 'https://img.favpng.com/25/1/17/avatar-user-computer-icons-software-developer-png-favpng-7SbFpNeqKqhhTrrrnHFUqk6U4.jpg'
+    }
+    ],
+    query: ''
+  }),
+  methods: {
+    saveInput (text) {
+      this.query = text
+    }
+  },
+  computed: {
+    filterUsers () {
+      const result = this.users.filter(user => {
+        return user.userName.toLowerCase().includes(this.query.toLowerCase())
+      })
+      return result
     }
   }
-}
-</style>
+};
+</script>
